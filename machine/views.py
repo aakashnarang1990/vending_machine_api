@@ -21,19 +21,31 @@ class UserInsertCurrencySerializer(generics.UpdateAPIView):
     serializer_class = AddCurrencySerializer
 
 
-class UserCancelTransactionApiView(UserInsertCurrencySerializer):
+class UserCancelTransactionApiView(generics.UpdateAPIView):
+    def get_object(self):
+        return Machine.objects.select_related('last_transaction').last()
+
     serializer_class = UserCancelTransactionSerializer
 
 
-class UserDispenseProductApiVIew(UserInsertCurrencySerializer):
+class UserDispenseProductApiVIew(generics.UpdateAPIView):
+    def get_object(self):
+        return Machine.objects.select_related('last_transaction').last()
+
     serializer_class = UserDispenseProductSerializer
 
 
-class AdminCashWithdrawApiView(UserInsertCurrencySerializer):
+class AdminCashWithdrawApiView(generics.UpdateAPIView):
+    def get_object(self):
+        return Machine.objects.select_related('last_transaction').last()
+
     serializer_class = WithdrawAmountSerializer
 
 
-class AdminAddProductApiView(UserInsertCurrencySerializer):
+class AdminAddProductApiView(generics.UpdateAPIView):
+    def get_object(self):
+        return Machine.objects.select_related('last_transaction').last()
+
     serializer_class = AddProductSerializer
 
 class TransactionApiView(generics.ListAPIView):
