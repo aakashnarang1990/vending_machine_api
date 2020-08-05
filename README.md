@@ -1,5 +1,6 @@
 # vending_machine_apis
 
 ### Steps:
-* source venv bin activate
+* create your virtualenv
+* pip install -r requirements.txt
 * python manage.py runserver
