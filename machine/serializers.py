@@ -43,8 +43,10 @@ class TransactionSerializer(serializers.ModelSerializer):
             if product.quantity == 0:
                 raise ValidationError("Item is out of stock, Please select any other item")
             if product.price > self.context.get('machine').last_transaction.total_transaction_amount:
-                raise ValidationError("you are short of Rs {}. \
-                    Please insert amount to continue or choose any other item")
+                raise ValidationError(
+                    "you are short of Rs {}. Please insert amount to continue or choose any other item".format(
+                        product.price - self.context.get('machine').last_transaction.total_transaction_amount
+                    ))
             return product
         if self.initial_data.get('action') == MachineTransaction.ACTION_MAINTENANCE_ADD_PRODUCT:
             return product
@@ -353,7 +355,7 @@ class AddProductSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         validated_data = super(AddProductSerializer, self).validate(attrs)
         if self.instance.state == Machine.STATE_CURRENCY_INSERTED:
-            raise ValidationError("You cannot withdraw money. A transaction is in progress")
+            raise ValidationError("You cannot add products. A transaction is in progress")
         transaction_data = {
             "action": MachineTransaction.ACTION_MAINTENANCE_ADD_PRODUCT,
             "product": validated_data.pop('product', None),
